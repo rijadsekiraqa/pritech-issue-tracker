@@ -10,7 +10,8 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2 class="mt-3">Projects</h2>
                 <a href="{{ route('projects.create') }}" class="mt-3 btn btn-sm btn-danger px-3 py-2">
-                     <i class="bi bi-plus-lg me-1"></i>Create</a>
+                     <i class="bi bi-plus-lg me-1"></i>Create
+                </a>
             </div>
 
             @if(session('success'))

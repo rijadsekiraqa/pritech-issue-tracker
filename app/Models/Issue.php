@@ -10,6 +10,15 @@ use Illuminate\Database\Eloquent\Model;
 class Issue extends Model
 {
 
+    protected $fillable = [
+        'project_id',
+        'title',
+        'description',
+        'status',
+        'priority',
+        'due_date',
+    ];
+
 
     public function project()
     {
@@ -25,5 +34,6 @@ class Issue extends Model
     {
         return $this->belongsToMany(Tag::class);
     }
+
     
 }
