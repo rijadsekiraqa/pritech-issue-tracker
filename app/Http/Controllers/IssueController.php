@@ -7,6 +7,7 @@ use App\Http\Requests\StoreIssueRequest;
 use App\Http\Requests\UpdateIssueRequest;
 use App\Models\Issue;
 use App\Models\Project;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class IssueController extends Controller
@@ -39,7 +40,9 @@ class IssueController extends Controller
     public function create()
     {
         $projects = Project::all();
-        return view('issues.create', compact('projects'));
+        $tags = Tag::all();
+
+        return view('issues.create', compact('projects', 'tags'));
     }
 
     /**
@@ -47,7 +50,12 @@ class IssueController extends Controller
      */
     public function store(StoreIssueRequest $request)
     {
-        Issue::create($request->validated());
+        $issue = Issue::create($request->validated());
+
+        if ($request->has('tags')) {
+            $issue->tags()->attach($request->tags);
+        }
+
         return redirect()->route('issues.index')
             ->with('success', 'Issue created successfully');
     }
@@ -67,8 +75,9 @@ class IssueController extends Controller
     public function edit(Issue $issue)
     {
         $projects = Project::all();
-
-        return view('issues.edit', compact('issue', 'projects'));
+        $tags = Tag::all();
+        $issue->load('tags');
+        return view('issues.edit', compact('issue', 'projects','tags'));
     }
 
     /**
@@ -77,6 +86,10 @@ class IssueController extends Controller
     public function update(UpdateIssueRequest $request, Issue $issue)
     {
         $issue->update($request->validated());
+
+        if ($request->has('tags')) {
+            $issue->tags()->sync($request->tags);
+        }
 
         return redirect()
             ->route('issues.index')
@@ -92,6 +105,4 @@ class IssueController extends Controller
         return redirect()->route('issues.index')
             ->with('success', 'Issue deleted successfully');
     }
-
-   
 }

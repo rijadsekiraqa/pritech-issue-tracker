@@ -19,7 +19,7 @@
                         @csrf
                         <div class="mb-3">
                             <label class="form-label">Project</label>
-                            <select name="project_id" class="form-select" >
+                            <select name="project_id" class="form-select">
                                 <option value="">Select Project</option>
                                 @foreach ($projects as $project)
                                     <option value="{{ $project->id }}">
@@ -29,48 +29,58 @@
                             </select>
                         </div>
 
-                         <div class="mb-3">
-                <label class="form-label">Title</label>
-                <input type="text" name="title" class="form-control" >
-            </div>
+                        <div class="mb-3">
+                            <label class="form-label">Title</label>
+                            <input type="text" name="title" class="form-control">
+                        </div>
 
-            <!-- DESCRIPTION -->
-            <div class="mb-3">
-                <label class="form-label">Description</label>
-                <textarea name="description" class="form-control" rows="4"></textarea>
-            </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-control" rows="4"></textarea>
+                        </div>
 
-            <div class="row">
+                        <div class="row">
 
-                <!-- STATUS -->
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Status</label>
-                    <select name="status" class="form-select" >
-                        <option value="open">Open</option>
-                        <option value="in_progress">In Progress</option>
-                        <option value="closed">Closed</option>
-                    </select>
-                </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Status</label>
+                                <select name="status" class="form-select">
+                                    <option value="open">Open</option>
+                                    <option value="in_progress">In Progress</option>
+                                    <option value="closed">Closed</option>
+                                </select>
+                            </div>
 
-                <!-- PRIORITY -->
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Priority</label>
-                    <select name="priority" class="form-select" >
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                    </select>
-                </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Priority</label>
+                                <select name="priority" class="form-select">
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
 
-                <!-- DUE DATE -->
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Due Date</label>
-                    <input type="date" name="due_date" class="form-control">
-                </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Due Date</label>
+                                <input type="date" name="due_date" class="form-control">
+                            </div>
 
-            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tags</label>
+                            <select name="tags[]" class="form-select" multiple>
+                                @foreach ($tags as $tag)
+                                    <option value="{{ $tag->id }}">
+                                        {{ $tag->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <small class="text-muted">
+                                Hold CTRL (Windows) or CMD (Mac) to select multiple tags
+                            </small>
+                        </div>
                         <div class="d-flex justify-content-end">
-                            <button class="btn btn-primary px-4" type="submit">
+                            <button type="submit" class="btn btn-primary px-4">
                                 Save Project
                             </button>
                         </div>

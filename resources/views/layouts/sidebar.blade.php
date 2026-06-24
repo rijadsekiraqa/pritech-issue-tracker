@@ -26,6 +26,12 @@
                   <i class="bi bi-exclamation-triangle me-2"></i> Issues
             </a>
         </li>
+         <li class="nav-item">
+            <a href="{{ route('tags.index') }}"
+                class="nav-link text-white rounded px-3 py-2 {{ request()->routeIs('tags.*') ? 'bg-primary' : '' }}">
+                  <i class="bi bi-tags me-2"></i> Tags
+            </a>
+        </li>
 
 
     </ul>

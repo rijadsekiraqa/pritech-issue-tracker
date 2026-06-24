@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Tag extends Model
 {
 
+     protected $fillable = [
+        'name',
+        'color',
+    ];
+
 
     public function issues()
     {

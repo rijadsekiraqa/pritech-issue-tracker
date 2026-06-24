@@ -107,6 +107,21 @@
 
                     </div>
 
+                    <div class="mb-3">
+                            <label class="form-label">Tags</label>
+                            <select name="tags[]" class="form-select" multiple>
+                                @foreach ($tags as $tag)
+                                    <option value="{{ $tag->id }}">
+                                        {{ $tag->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <small class="text-muted">
+                                Hold CTRL (Windows) or CMD (Mac) to select multiple tags
+                            </small>
+                    </div>
+
                     <button type="submit" class="btn btn-primary">
                         Update Issue
                     </button>
