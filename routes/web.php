@@ -17,3 +17,5 @@ Route::resource('tags', TagController::class);
 Route::resource('comments', CommentController::class);
 Route::get('/issues/{issue}/comments',[CommentController::class, 'loadComments'])->name('issues.comments');
 Route::post('/issues/{issue}/comments', [CommentController::class, 'storeAjax']);
+Route::post('/issues/{issue}/tags', [IssueController::class, 'attachTag']);
+Route::delete('/issues/{issue}/tags/{tag}', [IssueController::class, 'detachTag']);

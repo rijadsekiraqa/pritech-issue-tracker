@@ -53,18 +53,41 @@
                     </div>
 
                     <!-- TAGS -->
-                    <div class="mb-3">
-                        <label class="form-label">Tags</label>
-                        <div>
-                            @forelse($issue->tags as $tag)
-                                <span class="badge bg-primary me-1">
-                                    {{ $tag->name }}
-                                </span>
-                            @empty
-                                <span class="text-muted">No tags</span>
-                            @endforelse
-                        </div>
-                    </div>
+                <div class="mb-3">
+    <label class="form-label">Tags</label>
+
+    {{-- Selected tags --}}
+    <div id="tags-container" class="mb-2">
+        @forelse($issue->tags as $tag)
+            <span class="badge bg-primary me-1 tag-item"
+                  style="cursor:pointer"
+                  data-id="{{ $tag->id }}">
+                {{ $tag->name }} ✕
+            </span>
+        @empty
+            <span class="text-muted" id="no-tags">No tags</span>
+        @endforelse
+    </div>
+
+    {{-- Select2 wrapper --}}
+    <div class="mt-2">
+        <select id="tag-select" class="form-select w-100" multiple>
+
+            @foreach($tags as $tag)
+                @if(!$issue->tags->contains($tag->id))
+                    <option value="{{ $tag->id }}">
+                        {{ $tag->name }}
+                    </option>
+                @endif
+            @endforeach
+        </select>
+    </div>
+
+    {{-- Button jashtë select2 --}}
+    <button type="button" id="attach-tag-btn" class="btn btn-primary btn-sm mt-2">
+        Attach Tag
+    </button>
+</div>
 
                 </div>
             </div>
@@ -111,6 +134,85 @@
         </div>
 
     </div>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const issueId = @json($issue->id);
+
+    const tagsContainer = document.getElementById('tags-container');
+    const tagSelect = document.getElementById('tag-select');
+
+     $('#tag-select').select2({
+        placeholder: "Select tag",
+        width: '90%',
+          allowClear: true
+    });
+    
+    // ======================
+    // ATTACH TAG
+    // ======================
+    document.getElementById('attach-tag-btn').addEventListener('click', function () {
+    const tagIds = $('#tag-select').val(); // array
+
+    if (!tagIds || tagIds.length === 0) return;
+
+    fetch(`/issues/${issueId}/tags`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            tag_ids: tagIds
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        location.reload();
+    })
+    .catch(err => console.log(err));
+});
+
+
+    // ======================
+    // DETACH TAG (event delegation)
+    // ======================
+    tagsContainer.addEventListener('click', function (e) {
+
+        const tagEl = e.target.closest('.tag-item');
+        if (!tagEl) return;
+
+        const tagId = tagEl.dataset.id;
+
+        fetch(`/issues/${issueId}/tags/${tagId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+
+            // remove from UI
+            tagEl.remove();
+
+            // restore dropdown option
+            const option = document.createElement('option');
+            option.value = data.tag.id;
+            option.text = data.tag.name;
+            tagSelect.appendChild(option);
+
+            // show empty state if needed
+            if (tagsContainer.querySelectorAll('.tag-item').length === 0) {
+                tagsContainer.innerHTML = '<span class="text-muted" id="no-tags">No tags</span>';
+            }
+
+        })
+        .catch(err => console.log(err));
+    });
+
+});
+</script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
 
@@ -231,7 +333,35 @@
                     })
                     .catch(err => console.log(err));
             });
+            document.querySelectorAll('.tag-item').forEach(tag => {
+            tag.addEventListener('click', function () {
+
+                const tagId = this.dataset.id;
+
+                fetch(`/issues/${issueId}/tags/${tagId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+
+                    // remove from UI without reload
+                    this.remove();
+
+                    // show empty state if needed
+                    const container = document.getElementById('tags-container');
+
+                    if (container.children.length === 0) {
+                        container.innerHTML = '<span class="text-muted">No tags</span>';
+                    }
+                })
+                .catch(err => console.log(err));
+            });
+});
 
         });
     </script>
+    
 @endsection
