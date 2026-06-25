@@ -24,9 +24,27 @@ class UpdateProjectRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'start_date' => 'nullable|date',
-            'deadline' => 'nullable|date|after_or_equal:start_date',
+            'description' => 'required|string',
+            'start_date' => 'required|date',
+            'deadline' => 'required|date|after_or_equal:start_date',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'The project name is required.',
+            'name.string' => 'The project name must be text.',
+            'name.max' => 'The project name may not be greater than 255 characters.',
+
+            'description.required' => 'The project description is required.',
+
+            'start_date.required' => 'The start date is required.',
+            'start_date.date' => 'The start date must be a valid date.',
+
+            'deadline.required' => 'The deadline is required.',
+            'deadline.date' => 'The deadline must be a valid date.',
+            'deadline.after_or_equal' => 'The deadline cannot be before the start date.',
         ];
     }
 }

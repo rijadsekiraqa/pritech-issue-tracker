@@ -26,6 +26,8 @@
                     <thead class="table-dark">
                         <tr>
                             <th>Name</th>
+                            <th>Description</th>
+                            <th>Start Date</th>
                             <th>Deadline</th>
                             <th>Actions</th>
                         </tr>
@@ -35,9 +37,14 @@
                         @foreach ($projects as $project)
                             <tr>
                                 <td>
-                                    <strong>{{ $project->name }}</strong>
+                                    {{ $project->name }}
                                 </td>
-
+                                <td>
+                                    {{ $project->description }}
+                                </td>
+                                <td>
+                                    {{ $project->start_date }}
+                                </td>
                                 <td>
                                     @if ($project->deadline)
                                         <span class="badge bg-secondary">

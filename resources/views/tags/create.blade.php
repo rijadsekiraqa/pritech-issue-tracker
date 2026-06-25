@@ -20,7 +20,7 @@
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Name</label>
-                        <input type="text" name="name" class="form-control">
+                        <input type="text" name="name"  value="{{ old('name') }}" class="form-control">
                         @error('name')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror

@@ -62,60 +62,72 @@
                                 </select>
                             </div>
 
+
                             <div class="col-md-3">
-                                <div class="d-flex gap-2">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-funnel me-1"></i> Filter
-                                    </button>
+                                <label class="form-label fw-semibold">Tag</label>
+                                <select name="tag_id" class="form-select">
+                                    <option value="">All Tags</option>
 
-                                    <a href="{{ route('issues.index') }}" class="btn btn-outline-secondary">
-                                        Reset
-                                    </a>
-                                </div>
+                                    @foreach ($tags as $tag)
+                                        <option value="{{ $tag->id }}"
+                                            {{ request('tag_id') == $tag->id ? 'selected' : '' }}>
+                                            {{ $tag->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
+                           <div class="col-md-12">
+    <div class="d-flex justify-content-center gap-2">
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-funnel me-1"></i> Filter
+        </button>
 
+        <a href="{{ route('issues.index') }}" class="btn btn-outline-secondary">
+            Reset
+        </a>
+    </div>
+</div>
                         </div>
                     </form>
                 </div>
             </div>
             <div id="issues-table">
-    @include('issues.partials.table', ['issues' => $issues])
-</div>
+                @include('issues.partials.table', ['issues' => $issues])
+            </div>
             <div class="mt-3">
                 {{ $issues->links() }}
             </div>
 
         </div>
         <script>
-    let searchTimer;
+            let searchTimer;
 
-    document.getElementById('issue-search').addEventListener('keyup', function () {
-        clearTimeout(searchTimer);
+            document.getElementById('issue-search').addEventListener('keyup', function() {
+                clearTimeout(searchTimer);
 
-        searchTimer = setTimeout(() => {
-            const search = this.value;
-            const status = document.querySelector('select[name="status"]').value;
-            const priority = document.querySelector('select[name="priority"]').value;
+                searchTimer = setTimeout(() => {
+                    const search = this.value;
+                    const status = document.querySelector('select[name="status"]').value;
+                    const priority = document.querySelector('select[name="priority"]').value;
 
-            const params = new URLSearchParams({
-                search: search,
-                status: status,
-                priority: priority,
+                    const params = new URLSearchParams({
+                        search: search,
+                        status: status,
+                        priority: priority,
+                    });
+
+                    fetch(`{{ route('issues.index') }}?${params.toString()}`, {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                        .then(response => response.text())
+                        .then(html => {
+                            document.getElementById('issues-table').innerHTML = html;
+                        });
+                }, 500);
             });
-
-            fetch(`{{ route('issues.index') }}?${params.toString()}`, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('issues-table').innerHTML = html;
-            });
-        }, 500);
-    });
-</script>
-
+        </script>
     @endsection
 
 

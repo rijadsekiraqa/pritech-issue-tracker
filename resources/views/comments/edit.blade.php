@@ -26,6 +26,7 @@
                         <label class="form-label">Issue</label>
 
                         <select name="issue_id" class="form-select">
+                            <option value="">Select Issue</option>
                             @foreach ($issues as $issue)
                                 <option value="{{ $issue->id }}"
                                     {{ old('issue_id', $comment->issue_id) == $issue->id ? 'selected' : '' }}>
@@ -33,7 +34,6 @@
                                 </option>
                             @endforeach
                         </select>
-
                         @error('issue_id')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror

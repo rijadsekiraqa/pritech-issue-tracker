@@ -15,37 +15,46 @@ class IssueController extends Controller
     /**
      * Display a listing of the resource.
      */
-   public function index(Request $request)
-{
-    $query = Issue::with('project');
+    public function index(Request $request)
+    {
+        $query = Issue::with(['project', 'tags']);
 
-    if ($request->filled('search')) {
-        $search = $request->search;
+        if ($request->filled('search')) {
+            $search = $request->search;
 
-        $query->where(function ($q) use ($search) {
-            $q->where('title', 'like', "%{$search}%")
-              ->orWhere('description', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('priority')) {
+            $query->where('priority', $request->priority);
+        }
+
+         if ($request->filled('tag_id')) {
+        $query->whereHas('tags', function ($q) use ($request) {
+            $q->where('tags.id', $request->tag_id);
         });
+        }
+
+
+        $issues = $query->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        $tags = Tag::orderBy('name')->get();
+
+        if ($request->ajax()) {
+            return view('issues.partials.table', compact('issues'))->render();
+        }
+
+        return view('issues.index', compact('issues','tags'));
     }
-
-    if ($request->filled('status')) {
-        $query->where('status', $request->status);
-    }
-
-    if ($request->filled('priority')) {
-        $query->where('priority', $request->priority);
-    }
-
-    $issues = $query->latest()
-        ->paginate(10)
-        ->withQueryString();
-
-    if ($request->ajax()) {
-        return view('issues.partials.table', compact('issues'))->render();
-    }
-
-    return view('issues.index', compact('issues'));
-}
 
     /**
      * Show the form for creating a new resource.
@@ -53,9 +62,9 @@ class IssueController extends Controller
     public function create()
     {
         $projects = Project::all();
-        $tags = Tag::all();
+        // $tags = Tag::all();
 
-        return view('issues.create', compact('projects', 'tags'));
+        return view('issues.create', compact('projects'));
     }
 
     /**
@@ -89,9 +98,7 @@ class IssueController extends Controller
     public function edit(Issue $issue)
     {
         $projects = Project::all();
-        $tags = Tag::all();
-        $issue->load('tags');
-        return view('issues.edit', compact('issue', 'projects', 'tags'));
+        return view('issues.edit', compact('issue', 'projects'));
     }
 
     /**

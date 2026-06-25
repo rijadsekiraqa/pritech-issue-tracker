@@ -22,21 +22,31 @@
                             <select name="project_id" class="form-select">
                                 <option value="">Select Project</option>
                                 @foreach ($projects as $project)
-                                    <option value="{{ $project->id }}">
+                                    <option value="{{ $project->id }}"
+                                        {{ old('project_id') == $project->id ? 'selected' : '' }}>
                                         {{ $project->name }}
                                     </option>
                                 @endforeach
                             </select>
+                            @error('project_id')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Title</label>
-                            <input type="text" name="title" class="form-control">
+                            <input type="text" name="title" value="{{ old('title') }}" class="form-control">
+                            @error('title')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Description</label>
-                            <textarea name="description" class="form-control" rows="4"></textarea>
+                            <textarea name="description" class="form-control" rows="4">{{ old('description') }}</textarea>
+                            @error('description')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
 
                         <div class="row">
@@ -44,19 +54,30 @@
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Status</label>
                                 <select name="status" class="form-select">
-                                    <option value="open">Open</option>
-                                    <option value="in_progress">In Progress</option>
-                                    <option value="closed">Closed</option>
+                                    <option value="">Select status</option>
+                                    <option value="open" {{ old('status') == 'open' ? 'selected' : '' }}>Open</option>
+                                    <option value="in_progress" {{ old('status') == 'in_progress' ? 'selected' : '' }}>In
+                                        Progress</option>
+                                    <option value="closed" {{ old('status') == 'closed' ? 'selected' : '' }}>Closed
+                                    </option>
                                 </select>
+                                @error('status')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
 
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Priority</label>
                                 <select name="priority" class="form-select">
-                                    <option value="low">Low</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="high">High</option>
+                                    <option value="">Select Priority</option>
+                                    <option value="low" {{ old('priority') == 'low' ? 'selected' : '' }}>Low</option>
+                                    <option value="medium" {{ old('priority') == 'medium' ? 'selected' : '' }}>Medium
+                                    </option>
+                                    <option value="high" {{ old('priority') == 'high' ? 'selected' : '' }}>High</option>
                                 </select>
+                                @error('priority')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
 
                             <div class="col-md-4 mb-3">
@@ -65,23 +86,35 @@
                             </div>
 
                         </div>
+                        {{-- @php
+                            $selectedTags = old('tags', []);
+                        @endphp
                         <div class="mb-3">
                             <label class="form-label">Tags</label>
                             <select name="tags[]" class="form-select" multiple>
                                 @foreach ($tags as $tag)
-                                    <option value="{{ $tag->id }}">
+                                    <option value="{{ $tag->id }}"
+                                        {{ in_array($tag->id, $selectedTags) ? 'selected' : '' }}>
                                         {{ $tag->name }}
                                     </option>
                                 @endforeach
                             </select>
 
+                            @error('tags')
+                                <small class="text-danger d-block">{{ $message }}</small>
+                            @enderror
+
+                            @error('tags.*')
+                                <small class="text-danger d-block">{{ $message }}</small>
+                            @enderror
+
                             <small class="text-muted">
                                 Hold CTRL (Windows) or CMD (Mac) to select multiple tags
                             </small>
-                        </div>
+                        </div> --}}
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary px-4">
-                                Save Project
+                                Save Issue
                             </button>
                         </div>
 
