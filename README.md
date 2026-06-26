@@ -5,8 +5,8 @@
 - Password: password
 
 ### User 2
-'Email':besnik@test.com
-'password':password
+- Email':besnik@test.com
+- Password':password
 
 ### User 3
 - Email: ardit@test.com
