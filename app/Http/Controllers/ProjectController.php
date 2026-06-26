@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreProjectRequest;
-use App\Http\Requests\UpdateProjectRequest;
+use App\Http\Requests\Project\StoreProjectRequest;
+use App\Http\Requests\Project\UpdateProjectRequest;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -18,7 +18,7 @@ class ProjectController extends Controller
 
     public function index()
     {
-        $projects = Project::latest()->paginate(10);
+        $projects = Project::where('user_id', auth()->id())->latest()->get();
         return view('projects.index', compact('projects'));
     }
 

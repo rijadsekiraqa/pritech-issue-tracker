@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreIssueRequest;
-use App\Http\Requests\UpdateIssueRequest;
+use App\Http\Requests\Issue\StoreIssueRequest;
+use App\Http\Requests\Issue\UpdateIssueRequest;
 use App\Models\Issue;
 use App\Models\Project;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class IssueController extends Controller
@@ -36,16 +37,14 @@ class IssueController extends Controller
             $query->where('priority', $request->priority);
         }
 
-         if ($request->filled('tag_id')) {
-        $query->whereHas('tags', function ($q) use ($request) {
-            $q->where('tags.id', $request->tag_id);
-        });
+        if ($request->filled('tag_id')) {
+            $query->whereHas('tags', function ($q) use ($request) {
+                $q->where('tags.id', $request->tag_id);
+            });
         }
 
 
-        $issues = $query->latest()
-            ->paginate(10)
-            ->withQueryString();
+      $issues = $query->latest()->get();
 
         $tags = Tag::orderBy('name')->get();
 
@@ -53,7 +52,7 @@ class IssueController extends Controller
             return view('issues.partials.table', compact('issues'))->render();
         }
 
-        return view('issues.index', compact('issues','tags'));
+        return view('issues.index', compact('issues', 'tags'));
     }
 
     /**
@@ -62,7 +61,6 @@ class IssueController extends Controller
     public function create()
     {
         $projects = Project::all();
-        // $tags = Tag::all();
 
         return view('issues.create', compact('projects'));
     }
@@ -87,9 +85,10 @@ class IssueController extends Controller
      */
     public function show(Issue $issue)
     {
-        $issue->load(['project', 'tags',]);
+        $issue->load(['project', 'tags', 'members']);
         $tags = Tag::all();
-        return view('issues.show', compact('issue', 'tags'));
+        $users = User::all();
+        return view('issues.show', compact('issue', 'tags', 'users'));
     }
 
     /**
@@ -149,6 +148,29 @@ class IssueController extends Controller
             'tag' => [
                 'id' => $tag->id,
                 'name' => $tag->name
+            ]
+        ]);
+    }
+
+    public function attachMember(Request $request, Issue $issue)
+    {
+        $issue->members()->syncWithoutDetaching([$request->user_id]);
+
+        return response()->json([
+            'success' => true,
+            'user' => User::find($request->user_id)
+        ]);
+    }
+
+    public function detachMember(Issue $issue, User $user)
+    {
+        $issue->members()->detach($user->id);
+
+        return response()->json([
+            'success' => true,
+            'user' => [
+                'id'   => $user->id,
+                'name' => $user->name,
             ]
         ]);
     }

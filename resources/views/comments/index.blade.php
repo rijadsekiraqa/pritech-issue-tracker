@@ -20,9 +20,10 @@
             </div>
             @endif
 
+            <div class="rounded-3 overflow-hidden shadow-sm border">
             <div class="table-responsive">
 
-                <table class="table table-bordered table-striped mt-3">
+                <table class="table table-striped mb-0">
                     <thead class="table-dark">
                         <tr>
                             <th>Issue</th>
@@ -40,11 +41,11 @@
                                 <td>{{ $comment->body }}</td>
                                 <td>
                                     <a href="{{ route('comments.show', $comment) }}" class="btn btn-sm btn-primary">
-                                        View
+                                        <i class="bi bi-eye"></i>
                                     </a>
 
                                     <a href="{{ route('comments.edit', $comment) }}" class="btn btn-sm btn-warning">
-                                        Edit
+                                        <i class="bi bi-pencil"></i>
                                     </a>
 
                                     <form action="{{ route('comments.destroy', $comment) }}" method="POST"
@@ -53,7 +54,7 @@
                                         @method('DELETE')
 
                                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                                            Delete
+                                            <i class="bi bi-trash"></i>
                                         </button>
                                     </form>
                                 </td>
@@ -64,7 +65,7 @@
                 </table>
 
             </div>
-
+            </div>
         </div>
 
     </div>

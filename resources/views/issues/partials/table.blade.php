@@ -1,3 +1,4 @@
+<div class="rounded-3 overflow-hidden shadow-sm">
 <table class="table table-striped mb-0">
     <thead class="table-dark">
         <tr>
@@ -39,20 +40,20 @@
                 <td>{{ $issue->due_date ?? '-' }}</td>
 
                 <td>
-                    <a href="{{ route('issues.show', $issue) }}" class="btn btn-primary btn-sm">
-                        View
+                    <a href="{{ route('issues.show', $issue) }}" class="btn btn-primary btn-sm" title="Issue Detail">
+                        <i class="bi bi-eye"></i>
                     </a>
 
-                    <a href="{{ route('issues.edit', $issue) }}" class="btn btn-warning btn-sm">
-                        Edit
+                    <a href="{{ route('issues.edit', $issue) }}" class="btn btn-warning btn-sm" title="Edit">
+                        <i class="bi bi-pencil"></i>
                     </a>
 
                     <form action="{{ route('issues.destroy', $issue) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
 
-                        <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this issue?')">
-                            Delete
+                        <button class="btn btn-danger btn-sm" title="Delete" onclick="return confirm('Delete this issue?')">
+                            <i class="bi bi-trash"></i>
                         </button>
                     </form>
                 </td>
@@ -66,7 +67,4 @@
         @endforelse
     </tbody>
 </table>
-
-<div class="mt-3">
-    {{ $issues->links() }}
 </div>

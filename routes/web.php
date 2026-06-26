@@ -8,7 +8,9 @@ use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
 
-
+Route::get('/', function () {
+    return redirect()->route('login');
+});
 Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::get('/', function () {
         return view('dashboard');
@@ -21,7 +23,8 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::post('/issues/{issue}/comments', [CommentController::class, 'storeAjax']);
     Route::post('/issues/{issue}/tags', [IssueController::class, 'attachTag']);
     Route::delete('/issues/{issue}/tags/{tag}', [IssueController::class, 'detachTag']);
-
+    Route::post('/issues/{issue}/members', [IssueController::class, 'attachMember']);
+    Route::delete('/issues/{issue}/members/{user}', [IssueController::class, 'detachMember']);
 });
 
 require __DIR__.'/auth.php';

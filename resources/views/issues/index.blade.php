@@ -76,17 +76,17 @@
                                     @endforeach
                                 </select>
                             </div>
-                           <div class="col-md-12">
-    <div class="d-flex justify-content-center gap-2">
-        <button type="submit" class="btn btn-primary">
-            <i class="bi bi-funnel me-1"></i> Filter
-        </button>
+                            <div class="col-md-12">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-funnel me-1"></i> Filter
+                                    </button>
 
-        <a href="{{ route('issues.index') }}" class="btn btn-outline-secondary">
-            Reset
-        </a>
-    </div>
-</div>
+                                    <a href="{{ route('issues.index') }}" class="btn btn-outline-secondary">
+                                        Reset
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -94,45 +94,41 @@
             <div id="issues-table">
                 @include('issues.partials.table', ['issues' => $issues])
             </div>
-            <div class="mt-3">
-                {{ $issues->links() }}
-            </div>
-
+            
         </div>
-        <script>
-            let searchTimer;
+    </div>
+    <script>
+        let searchTimer;
+        document.getElementById('issue-search').addEventListener('keyup', function() {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => {
+                const search = this.value;
+                const status = document.querySelector('select[name="status"]').value;
+                const priority = document.querySelector('select[name="priority"]').value;
 
-            document.getElementById('issue-search').addEventListener('keyup', function() {
-                clearTimeout(searchTimer);
+                const params = new URLSearchParams({
+                    search: search,
+                    status: status,
+                    priority: priority,
+                });
 
-                searchTimer = setTimeout(() => {
-                    const search = this.value;
-                    const status = document.querySelector('select[name="status"]').value;
-                    const priority = document.querySelector('select[name="priority"]').value;
-
-                    const params = new URLSearchParams({
-                        search: search,
-                        status: status,
-                        priority: priority,
+                fetch(`{{ route('issues.index') }}?${params.toString()}`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('issues-table').innerHTML = html;
                     });
-
-                    fetch(`{{ route('issues.index') }}?${params.toString()}`, {
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-                            }
-                        })
-                        .then(response => response.text())
-                        .then(html => {
-                            document.getElementById('issues-table').innerHTML = html;
-                        });
-                }, 500);
-            });
-        </script>
-    @endsection
-
+            }, 1500);
+        });
+    </script>
 
     <script>
         setTimeout(() => {
             document.getElementById('success-alert')?.remove();
         }, 3000);
     </script>
+@endsection
+   

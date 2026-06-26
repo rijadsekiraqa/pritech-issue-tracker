@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreTagRequest;
-use App\Http\Requests\UpdateTagRequest;
+use App\Http\Requests\Tag\StoreTagRequest;
+use App\Http\Requests\Tag\UpdateTagRequest;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class TagController extends Controller
      */
     public function index()
     {
-       $tags = Tag::latest()->paginate(10);
+       $tags = Tag::latest()->get();
        return view('tags.index', compact('tags'));
     }
 

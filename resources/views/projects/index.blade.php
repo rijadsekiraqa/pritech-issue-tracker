@@ -10,86 +10,87 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2 class="mt-3">Projects</h2>
                 <a href="{{ route('projects.create') }}" class="mt-3 btn btn-sm btn-danger px-3 py-2">
-                     <i class="bi bi-plus-lg me-1"></i>Create
+                    <i class="bi bi-plus-lg me-1"></i>Create
                 </a>
             </div>
 
-            @if(session('success'))
-            <div class="alert alert-success" id="success-alert">
-                {{ session('success') }}
-            </div>
+            @if (session('success'))
+                <div class="alert alert-success" id="success-alert">
+                    {{ session('success') }}
+                </div>
             @endif
 
-            <div class="table-responsive">
-
-                <table class="table table-bordered table-striped mt-3">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Start Date</th>
-                            <th>Deadline</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @foreach ($projects as $project)
+            <div class="rounded-3 overflow-hidden shadow-sm border">
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0" style="border-collapse: collapse;">
+                        <thead class="table-dark">
                             <tr>
-                                <td>
-                                    {{ $project->name }}
-                                </td>
-                                <td>
-                                    {{ $project->description }}
-                                </td>
-                                <td>
-                                    {{ $project->start_date }}
-                                </td>
-                                <td>
-                                    @if ($project->deadline)
-                                        <span class="badge bg-secondary">
-                                            {{ $project->deadline }}
-                                        </span>
-                                    @else
-                                        <span class="text-muted">No deadline</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <a href="{{ route('projects.show', $project) }}" class="btn btn-sm btn-primary">
-                                        View
-                                    </a>
-
-                                    <a href="{{ route('projects.edit', $project) }}" class="btn btn-sm btn-warning">
-                                        Edit
-                                    </a>
-
-                                    <form action="{{ route('projects.destroy', $project) }}" method="POST"
-                                        class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                                            Delete
-                                        </button>
-                                    </form>
-                                </td>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Start Date</th>
+                                <th>Deadline</th>
+                                <th>Actions</th>
                             </tr>
-                        @endforeach
-                    </tbody>
+                        </thead>
 
-                </table>
+                        <tbody>
+                            @foreach ($projects as $project)
+                                <tr>
+                                    <td>
+                                        {{ $project->name }}
+                                    </td>
+                                    <td>
+                                        {{ $project->description }}
+                                    </td>
+                                    <td>
+                                        {{ $project->start_date }}
+                                    </td>
+                                    <td>
+                                        @if ($project->deadline)
+                                            <span class="badge bg-secondary">
+                                                {{ $project->deadline }}
+                                            </span>
+                                        @else
+                                            <span class="text-muted">No deadline</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('projects.show', $project) }}" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
 
+                                        <a href="{{ route('projects.edit', $project) }}" class="btn btn-sm btn-warning">
+                                             <i class="bi bi-pencil"></i>
+                                        </a>
+
+                                        <form action="{{ route('projects.destroy', $project) }}" method="POST"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+                                                  <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+
+                    </table>
+                </div>
             </div>
-
         </div>
+
+    </div>
 
     </div>
 @endsection
 
 
 
-    <script>
-        setTimeout(() => {
-            document.getElementById('success-alert')?.remove();
-        }, 3000);
-    </script>
+<script>
+    setTimeout(() => {
+        document.getElementById('success-alert')?.remove();
+    }, 3000);
+</script>

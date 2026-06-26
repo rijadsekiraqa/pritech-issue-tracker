@@ -19,10 +19,9 @@
                     {{ session('success') }}
                 </div>
             @endif
-
+         <div class="rounded-3 overflow-hidden shadow-sm border">
             <div class="table-responsive">
-
-                <table class="table table-bordered table-striped mt-3">
+                 <table class="table table-striped mb-0" style="border-collapse: collapse;">
                     <thead class="table-dark">
                         <tr>
                             <th>Name</th>
@@ -55,11 +54,11 @@
                                 </td>
                                 <td>
                                     <a href="{{ route('tags.show', $tag) }}" class="btn btn-sm btn-primary">
-                                        View
+                                        <i class="bi bi-eye"></i>
                                     </a>
 
                                     <a href="{{ route('tags.edit', $tag) }}" class="btn btn-sm btn-warning">
-                                        Edit
+                                        <i class="bi bi-pencil"></i>
                                     </a>
 
                                     <form action="{{ route('tags.destroy', $tag) }}" method="POST" class="d-inline">
@@ -67,7 +66,7 @@
                                         @method('DELETE')
 
                                         <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                                            Delete
+                                            <i class="bi bi-trash"></i>
                                         </button>
                                     </form>
                                 </td>
@@ -78,7 +77,7 @@
                 </table>
 
             </div>
-
+         </div>
         </div>
 
     </div>

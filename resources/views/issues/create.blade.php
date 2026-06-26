@@ -86,32 +86,6 @@
                             </div>
 
                         </div>
-                        {{-- @php
-                            $selectedTags = old('tags', []);
-                        @endphp
-                        <div class="mb-3">
-                            <label class="form-label">Tags</label>
-                            <select name="tags[]" class="form-select" multiple>
-                                @foreach ($tags as $tag)
-                                    <option value="{{ $tag->id }}"
-                                        {{ in_array($tag->id, $selectedTags) ? 'selected' : '' }}>
-                                        {{ $tag->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-
-                            @error('tags')
-                                <small class="text-danger d-block">{{ $message }}</small>
-                            @enderror
-
-                            @error('tags.*')
-                                <small class="text-danger d-block">{{ $message }}</small>
-                            @enderror
-
-                            <small class="text-muted">
-                                Hold CTRL (Windows) or CMD (Mac) to select multiple tags
-                            </small>
-                        </div> --}}
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary px-4">
                                 Save Issue

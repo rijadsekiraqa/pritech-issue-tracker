@@ -1,9 +1,5 @@
 <div class="col-md-2 bg-dark min-vh-100 p-3 text-white">
 
-    <div class="mb-4">
-        <small class="text-secondary">Management Panel</small>
-    </div>
-
     <ul class="nav flex-column gap-2">
 
         <li class="nav-item">
@@ -42,8 +38,6 @@
 
     </ul>
 
-    <div class="mt-4 text-secondary small">
-        © {{ date('Y') }} PRITECH
-    </div>
+   
 
 </div>

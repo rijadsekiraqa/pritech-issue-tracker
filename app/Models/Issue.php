@@ -5,11 +5,15 @@ namespace App\Models;
 use App\Models\Comment;
 use App\Models\Project;
 use App\Models\Tag;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Issue extends Model
 {
+     use HasFactory;
 
+     
     protected $fillable = [
         'project_id',
         'title',
@@ -17,6 +21,7 @@ class Issue extends Model
         'status',
         'priority',
         'due_date',
+        'user_id', 
     ];
 
 
@@ -35,5 +40,8 @@ class Issue extends Model
         return $this->belongsToMany(Tag::class);
     }
 
-    
+    public function members()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

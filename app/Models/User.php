@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Issue;
 use App\Models\Project;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -52,4 +53,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Project::class);
     }
+
+    public function issues()
+    {
+    return $this->belongsToMany(Issue::class);
+    }
+
 }
