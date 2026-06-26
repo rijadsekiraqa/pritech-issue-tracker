@@ -13,6 +13,9 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+   
+
     public function index()
     {
         $projects = Project::latest()->paginate(10);
@@ -32,7 +35,10 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        Project::create($request->validated());
+          Project::create([
+        ...$request->validated(),
+        'user_id' => auth()->id(),
+            ]);
 
         return redirect()->route('projects.index')->with('success', 'Project created successfully');
     }
@@ -42,8 +48,9 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-           $project->load(['issues']);
-           return view('projects.show', compact('project'));
+        $this->authorize('view', $project);
+        $project->load(['issues']);
+        return view('projects.show', compact('project'));
     }
 
     /**
@@ -51,6 +58,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
+        $this->authorize('update', $project);
         return view('projects.edit', compact('project'));
     }
 
@@ -70,6 +78,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        $this->authorize('delete', $project);
         $project->delete();
         return redirect()->route('projects.index')
             ->with('success', 'Project deleted successfully');

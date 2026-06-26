@@ -14,6 +14,37 @@
         <a class="navbar-brand" href="{{ route('projects.index') }}">
             Issue Tracker
         </a>
+          @auth
+            <div class="dropdown text-white ms-auto">
+
+                <a class="text-white dropdown-toggle text-decoration-none"
+                   href="#"
+                   role="button"
+                   data-bs-toggle="dropdown">
+
+                    {{ Auth::user()->name }}
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end">
+
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button class="dropdown-item">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+
+                </ul>
+            </div>
+        @endauth
+
+        @guest
+            <a href="{{ route('login') }}" class="btn btn-outline-light">
+                Login
+            </a>
+        @endguest
     </div>
 </nav>
 
@@ -26,5 +57,6 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
